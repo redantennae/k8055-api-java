@@ -15,6 +15,8 @@ public class BoardInterface {
     public interface Board extends Library {
         int OpenDevice(long addr);
         void CloseDevice();
+        void ResetCounter(long num);
+        int ReadCounter(long num);
     }
 
     /**

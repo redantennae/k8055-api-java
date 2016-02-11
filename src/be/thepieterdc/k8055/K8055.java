@@ -47,6 +47,15 @@ public class K8055 {
     }
 
     /**
+     * Gets the raw k8055 interface for direct access.
+     *
+     * @return the raw k8055 interface
+     */
+    public BoardInterface.Board board() {
+        return this.board;
+    }
+
+    /**
      * Connects to the K8055.
      *
      * @throws ConnectionException connecting failed

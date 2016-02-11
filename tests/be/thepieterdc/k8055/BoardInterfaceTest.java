@@ -1,6 +1,5 @@
 package be.thepieterdc.k8055;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
