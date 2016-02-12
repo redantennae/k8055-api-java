@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 /**
- * Created by pieter on 12/02/16.
+ * @author Pieter De Clercq
  */
 public class K8055Test {
 
@@ -23,16 +23,19 @@ public class K8055Test {
 
     @After
     public void tearDown() {
+        if(this.k8055.connected()) {
+            this.k8055.disconnect();
+        }
         this.k8055 = null;
     }
 
     @Test
-    public void testAddress() throws Exception {
+    public void testAddress() {
         assertEquals(0, this.k8055.address());
     }
 
     @Test
-    public void testBoard() throws Exception {
+    public void testBoard() {
         BoardInterface.Board boardInterface = BoardInterface.instance();
         assertEquals(boardInterface, this.k8055.board());
     }
@@ -56,7 +59,7 @@ public class K8055Test {
     }
 
     @Test
-    public void testConnection() throws Exception {
+    public void testConnection() throws ConnectionException {
         if(this.k8055.connected()) {
             this.k8055.disconnect();
         }
@@ -77,7 +80,7 @@ public class K8055Test {
     }
 
     @Test
-    public void testCounters() throws Exception {
+    public void testCounters() {
         Counter[] counters = this.k8055.counters();
         assertEquals(2, counters.length);
         assertEquals(1, counters[0].counter().number());
