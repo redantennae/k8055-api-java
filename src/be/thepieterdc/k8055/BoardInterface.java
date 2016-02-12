@@ -31,6 +31,16 @@ public class BoardInterface {
 
     private static Board board;
 
+    @Override
+    public boolean equals(Object other) {
+        return other instanceof BoardInterface;
+    }
+
+    @Override
+    public int hashCode() {
+        return 0;
+    }
+
     public static Board instance() {
         if(board == null) {
             System.setProperty("jna.library.path", ".");

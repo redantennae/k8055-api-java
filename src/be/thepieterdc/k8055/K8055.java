@@ -4,14 +4,14 @@ import be.thepieterdc.k8055.exceptions.ConnectionException;
 import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
 import be.thepieterdc.k8055.input.AnalogInput;
 import be.thepieterdc.k8055.input.DigitalInput;
-import be.thepieterdc.k8055.listeners.CounterListener;
 import be.thepieterdc.k8055.output.AnalogOutput;
 import be.thepieterdc.k8055.output.DigitalOutput;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
+/**
+ * The main class that handles all calls to the K8055.
+ *
+ * @author Pieter De Clercq
+ */
 public class K8055 {
 
     private final int address;
@@ -24,8 +24,11 @@ public class K8055 {
     private final DigitalInput[] digitalInputs;
     private final DigitalOutput[] digitalOutputs;
 
-    private final List<CounterListener> counterListeners = new ArrayList<>();
-
+    /**
+     * K8055 constructor.
+     *
+     * @param addr the address of the K8055
+     */
     public K8055(int addr) {
         if(addr < 0 || addr > 3) {
             throw new IllegalArgumentException("Address must be in range [0-3].");
@@ -63,21 +66,25 @@ public class K8055 {
         };
     }
 
-    public void addListener(CounterListener c) {
-        if(c == null) {
-            throw new IllegalArgumentException("CounterListener is null.");
-        }
-        this.counterListeners.add(c);
-    }
-
+    /**
+     * @return the address of the K8055
+     */
     public int address() {
         return this.address;
     }
 
+    /**
+     * @return the BoardInterface that allows raw access to the board
+     */
     public BoardInterface.Board board() {
         return this.board;
     }
 
+    /**
+     * Connects to the K8055.
+     *
+     * @throws ConnectionException a connection could not be established
+     */
     public void connect() throws ConnectionException {
         if(this.connected) {
             throw ConnectionStatusException.connectionForbidden();
@@ -89,18 +96,23 @@ public class K8055 {
         this.connected = true;
     }
 
+    /**
+     * @return true if there is an active connection
+     */
     public boolean connected() {
         return this.connected;
     }
 
+    /**
+     * @return the counters
+     */
     public Counter[] counters() {
         return this.counters.clone();
     }
 
-    public final List<CounterListener> counterListeners() {
-        return Collections.unmodifiableList(this.counterListeners);
-    }
-
+    /**
+     * Disconnects from the K8055.
+     */
     public void disconnect() {
         if(!this.connected) {
             throw ConnectionStatusException.connectionRequired();
@@ -117,13 +129,6 @@ public class K8055 {
     @Override
     public int hashCode() {
         return this.address;
-    }
-
-    public void removeListener(CounterListener c) {
-        if(c == null) {
-            throw new IllegalArgumentException("CounterListener is null.");
-        }
-        this.counterListeners.remove(c);
     }
 
     @Override
