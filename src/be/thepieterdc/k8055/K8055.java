@@ -1,68 +1,45 @@
 package be.thepieterdc.k8055;
 
 import be.thepieterdc.k8055.exceptions.ConnectionException;
+import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
+import be.thepieterdc.k8055.input.AnalogInput;
 
-/**
- * K8055
- *
- * @author Pieter De Clercq
- */
 public class K8055 {
 
-    /**
-     * The address of the K8055.
-     */
     private final int address;
-
-    /**
-     * The raw board.
-     */
     private BoardInterface.Board board;
-
-    /**
-     * True if connected.
-     */
     private boolean connected = false;
 
-    /**
-     * K8055 constructor.
-     *
-     * @param addr the address
-     */
+    private final AnalogInput[] analogInputs;
+    private final Counter[] counters;
+
     public K8055(int addr) {
         if(addr < 0 || addr > 3) {
-            throw new IllegalArgumentException("Address must be in range [0-3]");
+            throw new IllegalArgumentException("Address must be in range [0-3].");
         }
         this.address = addr;
         this.board = BoardInterface.instance();
+        this.analogInputs = new AnalogInput[]{
+                new AnalogInput(this, AnalogInput.AnalogInputs.ONE),
+                new AnalogInput(this, AnalogInput.AnalogInputs.TWO)
+        };
+        this.counters = new Counter[] {
+                new Counter(this, Counter.Counters.ONE),
+                new Counter(this, Counter.Counters.TWO)
+        };
     }
 
-    /**
-     * Gets the address [0-3] of the K8055.
-     *
-     * @return the address of the K8055
-     */
     public int address() {
         return this.address;
     }
 
-    /**
-     * Gets the raw k8055 interface for direct access.
-     *
-     * @return the raw k8055 interface
-     */
     public BoardInterface.Board board() {
         return this.board;
     }
 
-    /**
-     * Connects to the K8055.
-     *
-     * @throws ConnectionException connecting failed
-     */
     public void connect() throws ConnectionException {
         if(this.connected) {
-            throw new IllegalStateException("Already connected.");
+            throw ConnectionStatusException.connectionForbidden();
         }
         int result = this.board.OpenDevice(this.address);
         if(result < 0) {
@@ -71,21 +48,13 @@ public class K8055 {
         this.connected = true;
     }
 
-    /**
-     * Gets the connection state.
-     *
-     * @return true if connected to the K8055
-     */
     public boolean connected() {
         return this.connected;
     }
 
-    /**
-     * Disconnects from the K8055.
-     */
     public void disconnect() {
         if(!this.connected) {
-            throw new IllegalStateException("Not connected.");
+            throw ConnectionStatusException.connectionRequired();
         }
         this.board.CloseDevice();
         this.connected = false;
@@ -99,5 +68,10 @@ public class K8055 {
     @Override
     public int hashCode() {
         return this.address;
+    }
+
+    @Override
+    public String toString() {
+        return "K8055[address="+this.address+", connected="+this.connected+"]";
     }
 }
