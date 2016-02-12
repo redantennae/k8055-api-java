@@ -74,6 +74,20 @@ public class K8055 {
     }
 
     /**
+     * @return the analog inputs
+     */
+    public AnalogInput[] analogInputs() {
+        return this.analogInputs.clone();
+    }
+
+    /**
+     * @return the analog outputs
+     */
+    public AnalogOutput[] analogOutputs() {
+        return this.analogOutputs.clone();
+    }
+
+    /**
      * @return the BoardInterface that allows raw access to the board
      */
     public BoardInterface.Board board() {

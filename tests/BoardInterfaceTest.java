@@ -13,29 +13,29 @@ public class BoardInterfaceTest {
     private BoardInterface boardInterface;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         this.boardInterface = new BoardInterface();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         this.boardInterface = null;
     }
 
     @Test
-    public void testEquals() throws Exception {
+    public void testEquals() {
         BoardInterface another = new BoardInterface();
         assertEquals(another, this.boardInterface);
     }
 
     @Test
-    public void testHashCode() throws Exception {
+    public void testHashCode() {
         BoardInterface another = new BoardInterface();
         assertEquals(another.hashCode(), this.boardInterface.hashCode());
     }
 
     @Test
-    public void testInstance() throws Exception {
+    public void testInstance() {
         BoardInterface.Board anInstance = BoardInterface.instance();
         BoardInterface.Board anotherInstance = BoardInterface.instance();
         assertEquals(anotherInstance, anInstance);
