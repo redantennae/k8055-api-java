@@ -2,11 +2,12 @@ package be.thepieterdc.k8055.output;
 
 import be.thepieterdc.k8055.K8055;
 import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
+import be.thepieterdc.k8055.helpers.IO;
 import be.thepieterdc.k8055.helpers.Voltage;
 
-public class AnalogOutput {
+public class AnalogOutput extends Output<AnalogOutput.AnalogOutputs> {
 
-    public enum AnalogOutputs {
+    public enum AnalogOutputs implements IO.IOInterface {
         ONE(1),
         TWO(2);
 
@@ -16,6 +17,7 @@ public class AnalogOutput {
             this.channel = chan;
         }
 
+        @Override
         public int channel() {
             return this.channel;
         }
@@ -30,45 +32,23 @@ public class AnalogOutput {
         }
     }
 
-    private final AnalogOutputs ao;
-    private final K8055 k8055;
-
-    public AnalogOutput(K8055 k8055, AnalogOutputs analogInputs) {
-        if(k8055 == null) {
-            throw new IllegalArgumentException("K8055 is null.");
-        } else if(analogInputs == null) {
-            throw new IllegalArgumentException("Analog output is null.");
-        }
-        this.ao = analogInputs;
-        this.k8055 = k8055;
+    public AnalogOutput(K8055 k8055, AnalogOutputs analogOutputs) {
+        super(k8055, Signal.ANALOG, analogOutputs);
     }
 
+    @Override
     public void clear() {
         if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        this.k8055.board().ClearAnalogChannel(this.ao.channel);
-    }
-
-    @Override
-    public boolean equals(Object other) {
-        return other instanceof AnalogOutput && ((AnalogOutput) other).ao.equals(this.ao);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.ao.channel;
-    }
-
-    public AnalogOutputs output() {
-        return this.ao;
+        this.k8055.board().ClearAnalogChannel(this.ioInterface.channel);
     }
 
     public void max() {
         if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        this.k8055.board().SetAnalogChannel(this.ao.channel);
+        this.k8055.board().SetAnalogChannel(this.ioInterface.channel);
     }
 
     public void set(int voltage) {
@@ -78,15 +58,10 @@ public class AnalogOutput {
         if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        this.k8055.board().OutputAnalogChannel(this.ao.channel, voltage);
+        this.k8055.board().OutputAnalogChannel(this.ioInterface.channel, voltage);
     }
 
     public void set(Voltage voltage) {
         set(voltage.analog());
-    }
-
-    @Override
-    public String toString() {
-        return "AnalogOutput[channel="+this.ao.channel+"]";
     }
 }

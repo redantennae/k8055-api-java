@@ -2,11 +2,12 @@ package be.thepieterdc.k8055.output;
 
 import be.thepieterdc.k8055.K8055;
 import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
+import be.thepieterdc.k8055.helpers.IO;
 import be.thepieterdc.k8055.helpers.Voltage;
 
-public class DigitalOutput {
+public class DigitalOutput extends Output<DigitalOutput.DigitalOutputs> {
 
-    public enum DigitalOutputs {
+    public enum DigitalOutputs implements IO.IOInterface {
         ONE(1),
         TWO(2),
         THREE(3),
@@ -22,6 +23,7 @@ public class DigitalOutput {
             this.channel = chan;
         }
 
+        @Override
         public int channel() {
             return this.channel;
         }
@@ -36,49 +38,22 @@ public class DigitalOutput {
         }
     }
 
-    private final DigitalOutputs dou;
-    private final K8055 k8055;
-
     public DigitalOutput(K8055 k8055, DigitalOutputs digitalOutputs) {
-        if(k8055 == null) {
-            throw new IllegalArgumentException("K8055 is null.");
-        } else if(digitalOutputs == null) {
-            throw new IllegalArgumentException("Digital output is null.");
-        }
-        this.dou = digitalOutputs;
-        this.k8055 = k8055;
+        super(k8055, Signal.DIGITAL, digitalOutputs);
     }
 
     @Override
-    public boolean equals(Object other) {
-        return other instanceof DigitalOutput && ((DigitalOutput) other).dou.equals(this.dou);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.dou.channel;
-    }
-
-    public void off() {
+    public void clear() {
         if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        this.k8055.board().ClearDigitalChannel(this.dou.channel);
+        this.k8055.board().ClearDigitalChannel(this.ioInterface.channel);
     }
 
     public void on() {
         if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        this.k8055.board().SetDigitalChannel(this.dou.channel);
-    }
-
-    public DigitalOutputs output() {
-        return this.dou;
-    }
-
-    @Override
-    public String toString() {
-        return "DigitalOutput[channel="+this.dou.channel+"]";
+        this.k8055.board().SetDigitalChannel(this.ioInterface.channel);
     }
 }

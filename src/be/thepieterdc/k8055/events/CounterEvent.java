@@ -10,6 +10,12 @@ public class CounterEvent extends EventObject {
     private final int newValue;
     private final int oldValue;
 
+    /**
+     * Constructs a prototypical Event.
+     *
+     * @param source The object on which the Event initially occurred.
+     * @throws IllegalArgumentException if source is null.
+     */
     public CounterEvent(Object source, Counter counter, int oldValue, int newValue) {
         super(source);
         if(counter == null) {

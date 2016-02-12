@@ -2,10 +2,11 @@ package be.thepieterdc.k8055.input;
 
 import be.thepieterdc.k8055.K8055;
 import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
+import be.thepieterdc.k8055.helpers.IO;
 
-public class AnalogInput {
+public class AnalogInput extends Input<AnalogInput.AnalogInputs,Integer>{
 
-    public enum AnalogInputs {
+    public enum AnalogInputs implements IO.IOInterface {
         ONE(1),
         TWO(2);
 
@@ -15,6 +16,7 @@ public class AnalogInput {
             this.channel = chan;
         }
 
+        @Override
         public int channel() {
             return this.channel;
         }
@@ -29,42 +31,15 @@ public class AnalogInput {
         }
     }
 
-    private final AnalogInputs ai;
-    private final K8055 k8055;
-
     public AnalogInput(K8055 k8055, AnalogInputs analogInputs) {
-        if(k8055 == null) {
-            throw new IllegalArgumentException("K8055 is null.");
-        } else if(analogInputs == null) {
-            throw new IllegalArgumentException("Analog input is null.");
-        }
-        this.ai = analogInputs;
-        this.k8055 = k8055;
+        super(k8055, Signal.ANALOG, analogInputs);
     }
 
     @Override
-    public boolean equals(Object other) {
-        return other instanceof AnalogInput && ((AnalogInput) other).ai.equals(this.ai);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.ai.channel;
-    }
-
-    public AnalogInputs input() {
-        return this.ai;
-    }
-
-    @Override
-    public String toString() {
-        return "AnalogInput[channel="+this.ai.channel+"]";
-    }
-
-    public int value() {
+    public Integer value() {
         if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        return this.k8055.board().ReadAnalogChannel(this.ai.channel);
+        return this.k8055.board().ReadAnalogChannel(this.ioInterface.channel);
     }
 }

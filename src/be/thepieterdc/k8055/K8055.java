@@ -1,19 +1,14 @@
 package be.thepieterdc.k8055;
 
-import be.thepieterdc.k8055.events.OutputEvent;
 import be.thepieterdc.k8055.exceptions.ConnectionException;
 import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
 import be.thepieterdc.k8055.input.AnalogInput;
 import be.thepieterdc.k8055.input.DigitalInput;
 import be.thepieterdc.k8055.listeners.CounterListener;
-import be.thepieterdc.k8055.listeners.InputListener;
-import be.thepieterdc.k8055.listeners.OutputListener;
 import be.thepieterdc.k8055.output.AnalogOutput;
 import be.thepieterdc.k8055.output.DigitalOutput;
-import jdk.internal.util.xml.impl.Input;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -30,8 +25,6 @@ public class K8055 {
     private final DigitalOutput[] digitalOutputs;
 
     private final List<CounterListener> counterListeners = new ArrayList<>();
-    private final List<InputListener> inputListeners = new ArrayList<>();
-    private final List<OutputListener> outputListeners = new ArrayList<>();
 
     public K8055(int addr) {
         if(addr < 0 || addr > 3) {
@@ -77,20 +70,6 @@ public class K8055 {
         this.counterListeners.add(c);
     }
 
-    public void addListener(InputListener i) {
-        if(i == null) {
-            throw new IllegalArgumentException("InputListener is null.");
-        }
-        this.inputListeners.add(i);
-    }
-
-    public void addListener(OutputListener o) {
-        if(o == null) {
-            throw new IllegalArgumentException("OutputListener is null.");
-        }
-        this.outputListeners.add(o);
-    }
-
     public int address() {
         return this.address;
     }
@@ -112,6 +91,10 @@ public class K8055 {
 
     public boolean connected() {
         return this.connected;
+    }
+
+    public Counter[] counters() {
+        return this.counters.clone();
     }
 
     public final List<CounterListener> counterListeners() {
@@ -136,33 +119,11 @@ public class K8055 {
         return this.address;
     }
 
-    public final List<InputListener> inputListeners() {
-        return Collections.unmodifiableList(this.inputListeners);
-    }
-
-    public final List<OutputListener> outputListeners() {
-        return Collections.unmodifiableList(this.outputListeners);
-    }
-
     public void removeListener(CounterListener c) {
         if(c == null) {
             throw new IllegalArgumentException("CounterListener is null.");
         }
         this.counterListeners.remove(c);
-    }
-
-    public void removeListener(InputListener i) {
-        if(i == null) {
-            throw new IllegalArgumentException("InputListener is null.");
-        }
-        this.inputListeners.remove(i);
-    }
-
-    public void removeListener(OutputListener o) {
-        if(o == null) {
-            throw new IllegalArgumentException("OutputListener is null.");
-        }
-        this.outputListeners.remove(o);
     }
 
     @Override
