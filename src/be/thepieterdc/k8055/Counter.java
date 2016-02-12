@@ -41,6 +41,10 @@ public class Counter {
         this.k8055 = k8055;
     }
 
+    public Counters counter() {
+        return this.c;
+    }
+
     @Override
     public boolean equals(Object other) {
         return other instanceof Counter && ((Counter) other).c.equals(this.c);
@@ -52,10 +56,20 @@ public class Counter {
     }
 
     public void reset() {
-        if(!k8055.connected()) {
+        if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        k8055.board().ResetCounter(this.c.number);
+        this.k8055.board().ResetCounter(this.c.number);
+    }
+
+    public void setDebounce(int millis) {
+        if(millis < 0 || millis > 5000) {
+            throw new IllegalArgumentException("Time must be in range [0-5000] ms.");
+        }
+        if(!this.k8055.connected()) {
+            throw ConnectionStatusException.connectionRequired();
+        }
+        this.k8055.board().SetCounterDebounceTime(this.c.number, millis);
     }
 
     @Override
@@ -64,9 +78,9 @@ public class Counter {
     }
 
     public int value() {
-        if(!k8055.connected()) {
+        if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
         }
-        return (int) (k8055.board().ReadCounter(this.c.number) / 4294967297L);
+        return (int) (this.k8055.board().ReadCounter(this.c.number) / 4294967297L);
     }
 }

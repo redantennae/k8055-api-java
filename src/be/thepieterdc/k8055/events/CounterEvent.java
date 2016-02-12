@@ -1,7 +1,6 @@
 package be.thepieterdc.k8055.events;
 
 import be.thepieterdc.k8055.Counter;
-import be.thepieterdc.k8055.K8055;
 
 import java.util.EventObject;
 
@@ -39,6 +38,6 @@ public class CounterEvent extends EventObject {
 
     @Override
     public String toString() {
-        return "CounterEvent[counter="+this.counter.number()+", oldValue="+this.oldValue+", newValue="+this.newValue+"]";
+        return "CounterEvent[counter="+this.counter.counter().number()+", oldValue="+this.oldValue+", newValue="+this.newValue+"]";
     }
 }

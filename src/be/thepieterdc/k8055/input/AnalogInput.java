@@ -9,23 +9,23 @@ public class AnalogInput {
         ONE(1),
         TWO(2);
 
-        private final int address;
+        private final int channel;
 
-        AnalogInputs(int addr) {
-            this.address = addr;
+        AnalogInputs(int chan) {
+            this.channel = chan;
         }
 
-        public static AnalogInputs fromAddress(int a) {
+        public int channel() {
+            return this.channel;
+        }
+
+        public static AnalogInputs fromChannel(int c) {
             for(AnalogInputs ais : AnalogInputs.values()) {
-                if(ais.address == a) {
+                if(ais.channel == c) {
                     return ais;
                 }
             }
-            throw new IllegalArgumentException("Addres must be in range [1-2].");
-        }
-
-        public int address() {
-            return this.address;
+            throw new IllegalArgumentException("Channel must be in range [1-2].");
         }
     }
 
@@ -49,11 +49,22 @@ public class AnalogInput {
 
     @Override
     public int hashCode() {
-        return this.ai.address;
+        return this.ai.channel;
+    }
+
+    public AnalogInputs input() {
+        return this.ai;
     }
 
     @Override
     public String toString() {
-        return "AnalogInput[address="+this.ai.address+"]";
+        return "AnalogInput[channel="+this.ai.channel+"]";
+    }
+
+    public int value() {
+        if(!this.k8055.connected()) {
+            throw ConnectionStatusException.connectionRequired();
+        }
+        return this.k8055.board().ReadAnalogChannel(this.ai.channel);
     }
 }
