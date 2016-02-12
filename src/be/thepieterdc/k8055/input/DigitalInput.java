@@ -4,8 +4,16 @@ import be.thepieterdc.k8055.K8055;
 import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
 import be.thepieterdc.k8055.helpers.IO;
 
+/**
+ * Analog input handler.
+ *
+ * @author Pieter De Clercq
+ */
 public class DigitalInput extends Input<DigitalInput.DigitalInputs,Boolean> {
 
+    /**
+     * Enum that contains the actual analog inputs.
+     */
     public enum DigitalInputs implements IO.IOInterface {
         ONE(1),
         TWO(2),
@@ -15,15 +23,29 @@ public class DigitalInput extends Input<DigitalInput.DigitalInputs,Boolean> {
 
         private final int channel;
 
+        /**
+         * DigitalInputs constructor.
+         *
+         * @param chan the channel
+         */
         DigitalInputs(int chan) {
             this.channel = chan;
         }
 
+        /**
+         * @return the channel number
+         */
         @Override
         public int channel() {
             return this.channel;
         }
 
+        /**
+         * Gets an digital input from the given channel.
+         *
+         * @param c the channel
+         * @return the digital input
+         */
         public static DigitalInputs fromChannel(int c) {
             for(DigitalInputs dis : DigitalInputs.values()) {
                 if(dis.channel == c) {
@@ -34,10 +56,19 @@ public class DigitalInput extends Input<DigitalInput.DigitalInputs,Boolean> {
         }
     }
 
+    /**
+     * DigitalInput constructor.
+     *
+     * @param k8055 the k8055 to use
+     * @param digitalInputs the digital input
+     */
     public DigitalInput(K8055 k8055, DigitalInputs digitalInputs) {
         super(k8055, Signal.DIGITAL, digitalInputs);
     }
 
+    /**
+     * @return the value of the digital input channel
+     */
     @Override
     public Boolean value() {
         if(!this.k8055.connected()) {
