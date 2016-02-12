@@ -3,6 +3,11 @@ package be.thepieterdc.k8055;
 import com.sun.jna.Library;
 import com.sun.jna.Native;
 
+/**
+ * Class that bridges Java to the K8055.
+ *
+ * @author Pieter De Clercq
+ */
 public class BoardInterface {
 
     public interface Board extends Library {
@@ -26,7 +31,6 @@ public class BoardInterface {
         void ResetCounter(long num);
         int ReadCounter(long num);
         void SetCounterDebounceTime(long num, long debounceTime);
-
     }
 
     private static Board board;
@@ -41,6 +45,9 @@ public class BoardInterface {
         return 0;
     }
 
+    /**
+     * @return the singleton instance of the board
+     */
     public static Board instance() {
         if(board == null) {
             System.setProperty("jna.library.path", ".");
