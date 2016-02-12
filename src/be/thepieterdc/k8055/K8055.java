@@ -125,6 +125,20 @@ public class K8055 {
     }
 
     /**
+     * @return the digital inputs
+     */
+    public DigitalInput[] digitalInputs() {
+        return this.digitalInputs.clone();
+    }
+
+    /**
+     * @return the digital outputs
+     */
+    public DigitalOutput[] digitalOutputs() {
+        return this.digitalOutputs.clone();
+    }
+
+    /**
      * Disconnects from the K8055.
      */
     public void disconnect() {

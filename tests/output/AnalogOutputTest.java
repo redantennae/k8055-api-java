@@ -1,3 +1,5 @@
+package output;
+
 import be.thepieterdc.k8055.K8055;
 import be.thepieterdc.k8055.exceptions.ConnectionException;
 import be.thepieterdc.k8055.exceptions.ConnectionStatusException;

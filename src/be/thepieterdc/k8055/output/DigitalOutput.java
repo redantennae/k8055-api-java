@@ -5,8 +5,16 @@ import be.thepieterdc.k8055.exceptions.ConnectionStatusException;
 import be.thepieterdc.k8055.helpers.IO;
 import be.thepieterdc.k8055.helpers.Voltage;
 
+/**
+ * Digital output handler
+ *
+ * @author Pieter De Clercq
+ */
 public class DigitalOutput extends Output<DigitalOutput.DigitalOutputs> {
 
+    /**
+     * Enum that contains the actual digital outputs.
+     */
     public enum DigitalOutputs implements IO.IOInterface {
         ONE(1),
         TWO(2),
@@ -19,15 +27,29 @@ public class DigitalOutput extends Output<DigitalOutput.DigitalOutputs> {
 
         private final int channel;
 
+        /**
+         * DigitalOutputs constructor.
+         *
+         * @param chan the channel
+         */
         DigitalOutputs(int chan) {
             this.channel = chan;
         }
 
+        /**
+         * @return the channel number
+         */
         @Override
         public int channel() {
             return this.channel;
         }
 
+        /**
+         * Gets a digital output from the given channel.
+         *
+         * @param c the channel
+         * @return the digital output
+         */
         public static DigitalOutputs fromChannel(int c) {
             for(DigitalOutputs dos : DigitalOutputs.values()) {
                 if(dos.channel == c) {
@@ -38,10 +60,20 @@ public class DigitalOutput extends Output<DigitalOutput.DigitalOutputs> {
         }
     }
 
+    /**
+     * DigitalOutput constructor.
+     *
+     * @param k8055 the k8055 to use
+     * @param digitalOutputs the digital output
+     */
     public DigitalOutput(K8055 k8055, DigitalOutputs digitalOutputs) {
         super(k8055, Signal.DIGITAL, digitalOutputs);
     }
 
+
+    /**
+     * Set the value of the output to false.
+     */
     @Override
     public void clear() {
         if(!this.k8055.connected()) {
@@ -50,6 +82,9 @@ public class DigitalOutput extends Output<DigitalOutput.DigitalOutputs> {
         this.k8055.board().ClearDigitalChannel(this.ioInterface.channel);
     }
 
+    /**
+     * Set the value of the output to true.
+     */
     public void on() {
         if(!this.k8055.connected()) {
             throw ConnectionStatusException.connectionRequired();
