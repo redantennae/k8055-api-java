@@ -31,7 +31,7 @@ public class AnalogOutputTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown() {
         if(this.k8055.connected()) {
             this.k8055.disconnect();
         }

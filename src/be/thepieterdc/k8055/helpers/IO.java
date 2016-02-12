@@ -63,6 +63,11 @@ public abstract class IO<I extends IO.IOInterface> {
         public String scalar() {
             return this.scalar;
         }
+
+        @Override
+        public String toString() {
+            return this.scalar;
+        }
     }
 
     /**
@@ -104,6 +109,11 @@ public abstract class IO<I extends IO.IOInterface> {
         public String scalar() {
             return this.scalar;
         }
+
+        @Override
+        public String toString() {
+            return this.scalar;
+        }
     }
 
     protected final I ioInterface;
@@ -122,10 +132,6 @@ public abstract class IO<I extends IO.IOInterface> {
     public IO(K8055 k, Signal s, Type t, I ioInterface) {
         if(k == null) {
             throw new IllegalArgumentException("K8055 cannot be null.");
-        } else if(s == null) {
-            throw new IllegalArgumentException("Signal cannot be null.");
-        } else if(t == null) {
-            throw new IllegalArgumentException("Type cannot be null.");
         } else if(ioInterface == null) {
             throw new IllegalArgumentException("IOInterface cannot be null.");
         }
