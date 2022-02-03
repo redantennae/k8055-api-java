@@ -1,0 +1,40 @@
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
+
+group = 'be.thepieterdc.redantennae'
+version = '1.0.0-SNAPSHOT'
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+dependencies {
+    implementation 'net.java.dev.jna:jna:5.10.0'
+	
+	testImplementation 'junit:junit:4.12'
+}
+
+javadoc {
+    if(JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'be.thepieterdc.redantennae'
+            artifactId = 'k8055-api-java'
+            version = '1.0.0-SNAPSHOT'
+
+            from components.java
+        }
+    }
+}

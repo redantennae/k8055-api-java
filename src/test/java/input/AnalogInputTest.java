@@ -8,6 +8,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.sun.jna.Platform;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -46,7 +48,7 @@ public class AnalogInputTest {
     @Test(expected=ConnectionStatusException.class)
     public void testValueNotConnected() {
         this.k8055.disconnect();
-        int invalid = this.input.value();
+        this.input.value();
     }
 
     @Test
@@ -62,6 +64,6 @@ public class AnalogInputTest {
 
     @Test(expected=IllegalArgumentException.class)
     public void testAnalogInputsInvalid() {
-        AnalogInput.AnalogInputs invalid = AnalogInput.AnalogInputs.fromChannel(3);
+        AnalogInput.AnalogInputs.fromChannel(3);
     }
 }

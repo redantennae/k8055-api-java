@@ -50,9 +50,17 @@ public class BoardInterface {
      */
     public static Board instance() {
         if(board == null) {
-            System.setProperty("jna.library.path", ".");
-            board = (Board) Native.loadLibrary("k8055", Board.class);
+            board = (Board) Native.load(getLibraryName(), Board.class);
         }
         return board;
+    }
+    
+    private static String getLibraryName() {
+    	String os = System.getProperty("os.name");
+    	if(os != null && os.toLowerCase().startsWith("windows")) {
+    		return "k8055D";
+    	} else {
+    		return "k8055";
+    	}
     }
 }
